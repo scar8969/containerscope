@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  title: "🐳 docker-stats"
+  version: 0.1.0
+paths:
+  /api/containers:
+    get:
+      summary: live stats
+      responses:
+        "200":
+          description: ok
+  /api/containers/<name>/stats:
+    get:
+      summary: history
+      responses:
+        "200":
+          description: ok
+  /api/containers/<name>/logs:
+    get:
+      summary: logs
+      responses:
+        "200":
+          description: ok
+  /api/alerts:
+    post:
+      summary: add alert
+      responses:
+        "200":
+          description: ok
+  /api/alerts:
+    get:
+      summary: list
+      responses:
+        "200":
+          description: ok
+  /api/stream:
+    get:
+      summary: SSE
+      responses:
+        "200":
+          description: ok

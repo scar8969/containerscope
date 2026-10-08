@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}docker-stats · containers{% endblock %}
+{% block brand %}🐳 docker-stats{% endblock %}
+{% block nav %}
+<a href="{{ url_for('index') }}"{% if request.endpoint == 'index' %} class="on"{% endif %}>Containers</a>
+<a href="{{ url_for('alerts') }}"{% if request.endpoint == 'alerts' %} class="on"{% endif %}>Alerts</a>
+<a href="{{ url_for('stats.containers') }}">Containers JSON</a>
+<a href="{{ url_for('health') }}">Health</a>
+{% endblock %}
+{% block content %}
+<h1>Containers</h1>
+{% if not latest %}
+<div class="warnbox">No snapshots stored yet. The dashboard renders instantly with an empty state;
+  sampling the Docker socket is an explicit action — press <em>Poll daemon now</em> below or call
+  <span class="mono">GET {{ url_for('stats.containers') }}</span>. With no daemon reachable that route still answers
+  <span class="mono">200 {"containers": [], "available": false, "reason": "..."}</span> — an empty list and the real
+  exception, never an invented sample.</div>
+{% endif %}
+<div class="grid">
+  <div class="stat"><div class="k">containers seen</div><div class="v">{{ latest|length }}</div></div>
+  <div class="stat"><div class="k">snapshots stored</div><div class="v">{{ snapshots }}</div></div>
+  <div class="stat"><div class="k">alert rules</div><div class="v">{{ alerts|length }}</div></div>
+  <div class="stat"><div class="k">docker CLI</div><div class="v">{% if docker_cli %}<span class="tag on">found</span>{% else %}<span class="tag no">absent</span>{% endif %}</div></div>
+</div>
+<div class="panel">
+  <div class="hd">Poll the daemon</div>
+  <div class="bd">
+    <form method="post" action="{{ url_for('poll_now') }}">
+      <button class="btn" type="submit">Poll daemon now</button>
+      <p class="note" style="margin-top:10px">Reads <span class="mono">docker.from_env()</span> and writes one
+        <span class="mono">snapshots</span> row per container. If the socket is missing this flashes the real
+        exception instead of pretending the sample succeeded.</p>
+    </form>
+  </div>
+</div>
+<div class="panel">
+  <div class="hd">Latest sample per container</div>
+  <div class="bd">
+  {% if latest %}
+    <table>
+      <thead><tr><th>name</th><th>cpu</th><th>mem</th><th>net in</th><th>net out</th><th>sampled at</th><th></th></tr></thead>
+      <tbody>
+      {% for name, row in latest.items() %}
+        <tr>
+          <td class="mono">{{ name }}</td>
+          <td class="mono">{{ row.cpu|round(2) }}%</td>
+          <td class="mono">{{ row.mem|round(1) }}</td>
+          <td class="mono">{{ row.net_in|round(1) }}</td>
+          <td class="mono">{{ row.net_out|round(1) }}</td>
+          <td class="mono">{{ row.at }}</td>
+          <td><a href="{{ url_for('stats.container_stats', name=name) }}">series</a>
+              <a href="{{ url_for('stats.container_logs', name=name) }}">logs</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No snapshots stored.</div>
+  {% endif %}
+  </div>
+</div>
+{% if chart %}
+<div class="panel">
+  <div class="hd">CPU, last {{ chart|length }} sample(s) — {{ focus }}</div>
+  <div class="bd">
+    <div class="chart">
+      {% for point in chart %}<i style="height:{{ ((point.cpu or 0) / chart_peak * 100)|round(1) }}%" title="{{ point.t }} · {{ point.cpu }}%"></i>{% endfor %}
+    </div>
+    <p class="note">Bar height is <span class="mono">cpu / peak({{ chart_peak|round(2) }})</span> over the rows returned by
+      <span class="mono">stats.history.series("{{ focus }}", 60)</span>.</p>
+  </div>
+</div>
+{% endif %}
+<div class="panel">
+  <div class="hd">Alert rules</div>
+  <div class="bd">
+  {% if alerts %}
+    <table>
+      <thead><tr><th>id</th><th>container</th><th>metric</th><th>threshold</th><th>notify</th><th>last fired</th></tr></thead>
+      <tbody>
+      {% for a in alerts %}
+        <tr>
+          <td class="mono">{{ a.id }}</td>
+          <td class="mono">{{ a.container }}</td>
+          <td class="mono">{{ a.metric }}</td>
+          <td class="mono">{{ a.threshold }}</td>
+          <td class="mono">{{ a.notify }}</td>
+          <td class="mono">{{ a.last_fired or 'never' }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No alert rules. Add one on the <a href="{{ url_for('alerts') }}">Alerts</a> page.</div>
+  {% endif %}
+  </div>
+</div>
+{% endblock %}
