@@ -12,7 +12,7 @@ bp = Blueprint("stats", __name__)
 def containers():
     """Live container stats.
 
-    The frozen contract in `openapi/b12_docker_stats.yaml` documents 200 for
+    The frozen contract in `openapi/containerscope.yaml` documents 200 for
     this path, so a missing docker daemon is reported *inside* a 200 body as an
     explicit degradation envelope rather than as a 503: the app itself is
     healthy, only one dependency is missing.  No container data is fabricated --

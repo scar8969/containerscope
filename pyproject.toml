@@ -3,13 +3,13 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "b12-docker-stats"
+name = "containerscope"
 version = "0.1.0"
-description = "B12 docker-stats skeleton — Docker stats dashboard."
+description = "Docker stats dashboard: per-container CPU and memory history, logs and alert rules."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-authors = [{ name = "project-skeletons maintainers" }]
+authors = [{ name = "Priyanshu Rout" }]
 keywords = ["flask", "service", "docker_stats"]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -47,7 +47,7 @@ Documentation = "https://example.invalid/docker_stats/docs"
 Issues = "https://example.invalid/docker_stats/issues"
 
 [project.scripts]
-b12-docker-stats = "docker_stats.cli:main"
+containerscope = "docker_stats.cli:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

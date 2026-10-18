@@ -1,4 +1,4 @@
-"""B12 docker-stats — tests. Run: pytest test_b12_docker_stats.py"""
+"""B12 docker-stats — tests. Run: pytest test_containerscope.py"""
 import sys, os
 
 import pytest

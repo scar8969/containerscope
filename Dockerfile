@@ -34,7 +34,7 @@ RUN groupadd --system --gid 1001 app \
 WORKDIR /app
 
 COPY --from=builder /wheels /wheels
-RUN python -m pip install --no-cache-dir --no-index --find-links=/wheels b12-docker-stats \
+RUN python -m pip install --no-cache-dir --no-index --find-links=/wheels containerscope \
  && rm -rf /wheels \
  && mkdir -p /var/lib/docker_stats/instance /var/lib/docker_stats/log \
  && chown -R app:app /var/lib/docker_stats /app

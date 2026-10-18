@@ -1,6 +1,6 @@
 # Architecture -- Docker_stats
 
-B12 docker-stats skeleton — Docker stats dashboard.
+B12 docker-stats service — Docker stats dashboard.
 
 This document explains how the service is put together, why the seams sit where
 they do, and what breaks first under load.
@@ -9,7 +9,7 @@ they do, and what breaks first under load.
 
 ## 1. Context
 
-b12_docker_stats is a single-process Flask service. It owns its own database (SQLite by
+containerscope is a single-process Flask service. It owns its own database (SQLite by
 default, any SQLAlchemy-supported backend via `DATABASE_URL`) and is deployed
 behind a reverse proxy or an orchestrator.
 
@@ -73,7 +73,7 @@ flowchart TB
 | `templates/alerts.html` | asset |
 | `templates/base.html` | asset |
 | `templates/index.html` | asset |
-| `tests/test_b12_docker_stats.py` | module |
+| `tests/test_containerscope.py` | module |
 | `_app.py` | asset |
 
 ---
@@ -136,8 +136,8 @@ writable lives under `/app`.
 
 | Table | Owner |
 | --- | --- |
-| `snapshots` | owned by `b12_docker_stats` |
-| `alerts` | owned by `b12_docker_stats` |
+| `snapshots` | owned by `containerscope` |
+| `alerts` | owned by `containerscope` |
 
 Tables are created by the application's own bootstrap on first use. No migration
 tool is wired in; the schema is additive, and the service tolerates a missing or
