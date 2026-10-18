@@ -3,23 +3,33 @@
 The docker SDK is an install-time dependency, so it is imported lazily inside the
 subcommands: `--help` must work on a bare interpreter.
 """
-import argparse, sys
+
+import argparse
+import sys
+
 from . import paths
+
 
 def _db():
     """Open the SQLite session lazily (Flask-SQLAlchemy is not needed for --help)."""
     from flask import Flask
+
     from .models import db
+
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(paths.INSTANCE_DIR / "dockerstats.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + str(
+        paths.INSTANCE_DIR / "dockerstats.db"
+    )
     db.init_app(app)
     ctx = app.app_context()
     ctx.push()
     db.create_all()
     return db
 
+
 def cmd_ps(_args):
     from .stats.collector import poll
+
     try:
         rows = poll()
     except Exception as e:
@@ -30,12 +40,16 @@ def cmd_ps(_args):
         return 0
     print(f"{'container':<24} {'cpu%':>7} {'mem':>12} {'net_in':>14} {'net_out':>14}  status")
     for c in rows:
-        print(f"{c['container']:<24} {c['cpu']:>7} {c['mem']:>12} {c['net_in']:>14} "
-              f"{c['net_out']:>14}  {c['status']}")
+        print(
+            f"{c['container']:<24} {c['cpu']:>7} {c['mem']:>12} {c['net_in']:>14} "
+            f"{c['net_out']:>14}  {c['status']}"
+        )
     return 0
+
 
 def cmd_history(args):
     from .stats.history import series
+
     _db()
     rows = series(args.container, args.minutes)
     if not rows:
@@ -45,8 +59,10 @@ def cmd_history(args):
         print(f"{r['t']}  cpu={r['cpu']}  mem={r['mem']}")
     return 0
 
+
 def cmd_alerts(_args):
     from .models import Alert
+
     _db()
     rows = Alert.query.all()
     if not rows:
@@ -54,9 +70,12 @@ def cmd_alerts(_args):
         return 0
     for a in rows:
         fired = a.last_fired.isoformat() if a.last_fired else "-"
-        print(f"{a.id:<4} {a.container:<24} {a.metric:<8} >= {a.threshold:<8} "
-              f"notify={a.notify:<10} last_fired={fired}")
+        print(
+            f"{a.id:<4} {a.container:<24} {a.metric:<8} >= {a.threshold:<8} "
+            f"notify={a.notify:<10} last_fired={fired}"
+        )
     return 0
+
 
 def main():
     p = argparse.ArgumentParser(prog="docker-stats")

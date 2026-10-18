@@ -1,7 +1,9 @@
 from datetime import datetime
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
+
 
 class Snapshot(db.Model):
     __tablename__ = "snapshots"
@@ -12,6 +14,7 @@ class Snapshot(db.Model):
     net_in = db.Column(db.BigInteger, default=0)
     net_out = db.Column(db.BigInteger, default=0)
     at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class Alert(db.Model):
     __tablename__ = "alerts"
