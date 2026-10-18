@@ -11,6 +11,7 @@ missing /var/run/docker.sock can never hang a page render.
 """
 
 import shutil
+from typing import Any
 
 from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 
@@ -39,7 +40,7 @@ def build_app():
 
     def _latest_by_container():
         """Newest stored snapshot per container.  Pure sqlite read."""
-        latest = {}
+        latest: dict[str, Any] = {}
         for row in Snapshot.query.order_by(Snapshot.id.desc()).limit(2000).all():
             latest.setdefault(row.container, row)
         return latest
