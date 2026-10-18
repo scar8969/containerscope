@@ -27,7 +27,6 @@ paths:
       responses:
         "200":
           description: ok
-  /api/alerts:
     get:
       summary: list
       responses:

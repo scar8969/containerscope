@@ -70,6 +70,7 @@ Every route below is in [`openapi/containerscope.yaml`](openapi/containerscope.y
 | `GET` | `/api/containers/<name>/stats` | history |
 | `GET` | `/api/containers/<name>/logs` | logs |
 | `GET` | `/api/alerts` | list |
+| `POST` | `/api/alerts` | add alert |
 | `GET` | `/api/stream` | SSE |
 
 ## Screenshots
@@ -103,7 +104,7 @@ These numbers were produced on this checkout by `pytest --cov` and by booting `w
 
 | Signal | Value |
 | --- | --- |
-| Tests | **21 / 21 passed** (2.0 s, exit 0) |
+| Tests | **21 / 21 passed** (1.8 s, exit 0) |
 | Line coverage | **61.6%** — 421 of 644 statements |
 | Source | 15 files / 1,469 lines |
 | Test code | 4 files / 215 lines |
