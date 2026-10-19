@@ -132,7 +132,7 @@ Produced on this checkout by `pytest --cov` and by booting `wsgi.py` and issuing
 | --- | --- |
 | Tests | **21 / 21 passed** (1.8 s, exit 0) |
 | Line coverage | **61.6%** — 421 of 644 statements |
-| Source | 15 files / 1,470 lines |
+| Source | 15 files / 1,493 lines |
 | Test code | 4 files / 215 lines |
 | Documented paths | 5 in the spec, 5 GET |
 | Live probe | 13 GET requests to the booted app, **13 answered 200** |
@@ -175,7 +175,7 @@ containerscope/
 │   ├── paths.py                         52  Filesystem layout for docker_stats
 │   ├── stats/collector.py               31  
 │   ├── models.py                        27  
-│   ├── stats/alerts.py                  24  
+│   ├── stats/alerts.py                  26  
 ├── openapi/containerscope.yaml            the contract of record
 ├── schema/containerscope.sql              the DDL
 ├── tests/                       the suite that has to stay green

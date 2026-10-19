@@ -1,6 +1,6 @@
-from datetime import datetime
-
 from flask_sqlalchemy import SQLAlchemy
+
+from .clock import utcnow
 
 db = SQLAlchemy()
 
@@ -13,7 +13,7 @@ class Snapshot(db.Model):
     mem = db.Column(db.BigInteger, default=0)
     net_in = db.Column(db.BigInteger, default=0)
     net_out = db.Column(db.BigInteger, default=0)
-    at = db.Column(db.DateTime, default=datetime.utcnow)
+    at = db.Column(db.DateTime, default=utcnow)
 
 
 class Alert(db.Model):

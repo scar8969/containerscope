@@ -1,11 +1,13 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
+
+from ..clock import utcnow
 
 
 def check_thresholds(snapshot):
     from ..models import Alert, db
 
     fired = []
-    now = datetime.utcnow()
+    now = utcnow()
     for a in Alert.query.all():
         value = snapshot.get(a.metric, 0)
         if value >= a.threshold:
