@@ -4,7 +4,7 @@ Every line below was produced by a command run against this exact checkout, on t
 
 | | |
 | --- | --- |
-| Generated | 2026-10-19 02:57 |
+| Generated | 2026-10-19 09:40 |
 | Python | 3.14.7 |
 | Platform | Windows 11 |
 
@@ -15,7 +15,7 @@ python -m pytest -q
 ```
 
 - exit code **0**
-- 21 passed, 1 warning in 1.19s
+- 21 passed, 1 warning in 1.26s
 
 ## Static gates
 
@@ -39,6 +39,21 @@ The application was imported through `wsgi.py` and each GET path declared in `op
 | 200 | `/api/stream` | 117 | text/event-stream |
 
 5 paths walked, 0 of them raised or answered 5xx.
+
+## CLI
+
+```
+usage: docker-stats [-h] {ps,history,alerts} ...
+
+positional arguments:
+  {ps,history,alerts}
+    ps                 poll the docker daemon once and print live stats
+    history            print recorded samples for one container
+    alerts             list alert rules
+
+options:
+  -h, --help           show this help message and exit
+```
 
 ## Screenshots
 
